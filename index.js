@@ -1,10 +1,12 @@
 const express = require("express");
-const app = express();
 const cors = require("cors");
 const config = require("config");
 const mongoose = require("mongoose");
+const cookieParser = require('cookie-parser')
+const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.cors({ origin: "*" });
 mongoose.connect(
   `mongodb://${config.get("DB.host")}:${config.get("DB.port")}/${config.get(
