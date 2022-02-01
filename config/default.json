@@ -1,0 +1,12 @@
+{
+  "server": {
+    "port": 8080
+  },
+  "DB": {
+    "host": "localhost",
+    "port": 27017,
+    "dbName": "boubaa"
+  },
+  "secret": "secret",
+  "origin": "http://localhost:4200"
+}
