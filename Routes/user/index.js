@@ -16,7 +16,7 @@ router.post(
   async (req, res) => {
     const user = req.body;
     try {
-      const newUser = createUser(user);
+      const newUser = await createUser(user);
       res.status(201).json({ message: "Success", data: newUser });
     } catch (error) {
       res.status(500).json({ message: "Server Error" });

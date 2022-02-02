@@ -6,6 +6,8 @@ module.exports = {
     body("email").not().isEmpty(),
     body("email").trim(),
     body("password").not().isEmpty(),
+    body("role").not().isEmpty(),
+    body("role").trim(),
     body("password").isLength({ min: 8, max: 16 }),
   ],
   signinValidation: [

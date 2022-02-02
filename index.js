@@ -27,3 +27,4 @@ dbConnection.once("open", () => {
     console.log("server is running");
   });
 });
+module.exports = app;
