@@ -115,7 +115,24 @@ const signinEndpointTestCases = () => {
     expect(response.body.message).toBe("Invalid Info!");
   });
 };
+const signoutEndpointTestCases = () => {
+  it("Suppose to signout user ", async () => {
+    let newUser = await createUser({
+      email: "a@a.com",
+      password: "123123123",
+      role: "Regular",
+    });
+    await request
+      .post("/user/signin")
+      .send({ email: "a@a.com", password: "123123123" });
+    let response = await request.get("/user/signout");
+    expect(response.status).toBe(201);
+    expect(response.body.message).toBe("Success");
+  });
+};
 const restApiTestCases = () => {
-  signupEndpointTestCases(), signinEndpointTestCases();
+  signupEndpointTestCases(),
+    signinEndpointTestCases(),
+    signoutEndpointTestCases();
 };
 describe("Testing Restful API for users", restApiTestCases);
