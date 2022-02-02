@@ -1,7 +1,6 @@
 const supertest = require("supertest");
 const app = require("../../index");
 const request = supertest(app);
-const mongoose = require("mongoose");
 const { createUser } = require("../../Models/user/index");
 const { setupDB } = require("../testDbSetup");
 
@@ -130,9 +129,9 @@ const signoutEndpointTestCases = () => {
     expect(response.body.message).toBe("Success");
   });
 };
-const restApiTestCases = () => {
+const userTestCases = () => {
   signupEndpointTestCases(),
     signinEndpointTestCases(),
     signoutEndpointTestCases();
 };
-describe("Testing Restful API for users", restApiTestCases);
+describe("Testing Restful API for users", userTestCases);

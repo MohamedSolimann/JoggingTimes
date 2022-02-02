@@ -50,15 +50,17 @@ router.get("/:id", async (req, res) => {
   try {
     let record = await getRecordById(recordId);
     if (record === "Record no longer exists!") {
-      res.status(400).json({ message: "User no longer exists!" });
-    } else if (record === "User not found") {
-      res.status(400).json({ message: "User not found" });
+      res.status(400).json({ message: "Record no longer exists!" });
+    } else if (record === "Record not found") {
+      res.status(400).json({ message: "Record not found" });
+    } else if (record === "ObjectId") {
+      res.status(400).json({ message: "Record id must be objectid" });
     } else {
       res.status(200).json({ message: "Success", data: record });
     }
   } catch (error) {
     if (error.kind === "ObjectId") {
-      res.status(400).json({ message: "Please check the user id" });
+      res.status(400).json({ message: "Please check the record id" });
     } else {
       res.status(500).json({ message: "Error", error });
     }

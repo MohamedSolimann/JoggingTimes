@@ -16,7 +16,7 @@ async function getRecordById(recordId) {
   try {
     const record = await recordSchema.findOne({ _id: recordId }).lean();
     if (record) {
-      if (record.deletedDate) {
+      if (record.deleteDate) {
         return "Record no longer exists!";
       } else {
         return record;
@@ -25,7 +25,7 @@ async function getRecordById(recordId) {
       return "User not found";
     }
   } catch (error) {
-    return false;
+    return error.kind;
   }
 }
 async function getRecords() {
