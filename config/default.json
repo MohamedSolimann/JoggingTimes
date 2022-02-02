@@ -5,7 +5,7 @@
   "DB": {
     "host": "localhost",
     "port": 27017,
-    "dbName": "boubaa"
+    "dbName": "jogging"
   },
   "secret": "secret",
   "origin": "http://localhost:4200"
