@@ -30,7 +30,9 @@ async function userAuthentication(email, password) {
     const user = await getUserByEmail(email);
     if (user) {
       const validPassword = bcrypt.compareSync(password, user.password);
-      return user;
+      if (validPassword) {
+        return user;
+      }
     } else {
       return false;
     }

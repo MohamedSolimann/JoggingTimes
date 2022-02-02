@@ -12,28 +12,34 @@ const {
   updateRecord,
   deleteRecord,
 } = require("../../Models/records/index");
-
-router.post("/", createValidation, catchValidationErrors, async (req, res) => {
-  const { date, time, distance, user_id } = req.body;
-  try {
-    const newRecord = await createRecord({
-      _id: mongoose.Types.ObjectId(),
-      date,
-      time,
-      distance,
-      user_id,
-      createDate: new Date(),
-    });
-    if (newRecord) {
-      res.status(201).json({ message: "Success", data: newRecord });
-    } else {
-      res.status(400).json({ message: "Error", error: newRecord });
+const { userAuthorization } = require("../user/middleaware");
+router.post(
+  "/",
+  userAuthorization,
+  createValidation,
+  catchValidationErrors,
+  async (req, res) => {
+    const { date, time, distance, user_id } = req.body;
+    try {
+      const newRecord = await createRecord({
+        _id: mongoose.Types.ObjectId(),
+        date,
+        time,
+        distance,
+        user_id,
+        createDate: new Date(),
+      });
+      if (newRecord) {
+        res.status(201).json({ message: "Success", data: newRecord });
+      } else {
+        res.status(400).json({ message: "Error", error: newRecord });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Error", error });
     }
-  } catch (error) {
-    res.status(500).json({ message: "Error", error });
   }
-});
-router.get("/", async (req, res) => {
+);
+router.get("/", userAuthorization, async (req, res) => {
   try {
     const records = await getRecords();
     if (records) {
@@ -45,7 +51,7 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: "Error", error });
   }
 });
-router.get("/:id", async (req, res) => {
+router.get("/:id", userAuthorization, async (req, res) => {
   const recordId = req.params.id;
   try {
     let record = await getRecordById(recordId);
@@ -66,7 +72,7 @@ router.get("/:id", async (req, res) => {
     }
   }
 });
-router.put("/:id", async (req, res) => {
+router.put("/:id", userAuthorization, async (req, res) => {
   const recordId = req.params.id;
   try {
     let updatedRecord = await updateRecord(recordId, req.body);
@@ -79,7 +85,7 @@ router.put("/:id", async (req, res) => {
     res.status(500).json({ message: "Error", error });
   }
 });
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", userAuthorization, async (req, res) => {
   let recordId = req.params.id;
   try {
     let record = await deleteRecord(recordId);

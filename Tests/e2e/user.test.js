@@ -9,12 +9,12 @@ setupDB();
 const signupEndpointTestCases = () => {
   it("Suppose to create new user", async () => {
     const response = await request.post("/user/signup").send({
-      email: "a@a.com",
+      email: "a12@a.com",
       password: "123123123",
       role: "Regular",
     });
     expect(response.status).toBe(201);
-    expect(response.body.data.email).toBe("a@a.com");
+    expect(response.body.data.email).toBe("a12@a.com");
     expect(response.body.data.role).toBe("Regular");
   });
   it("Suppose to get validtaion error from create endpoint", async () => {
@@ -66,13 +66,13 @@ const signupEndpointTestCases = () => {
 const signinEndpointTestCases = () => {
   it("Suppose to signin user ", async () => {
     let newUser = await createUser({
-      email: "a@a.com",
+      email: "a123@a.com",
       password: "123123123",
       role: "Regular",
     });
     let response = await request
       .post("/user/signin")
-      .send({ email: "a@a.com", password: "123123123" });
+      .send({ email: "a123@a.com", password: "123123123" });
     expect(response.status).toBe(200);
     expect(response.body.message).toBe("Success");
     expect(response.headers["set-cookie"].length).toBe(1);
@@ -121,10 +121,12 @@ const signoutEndpointTestCases = () => {
       password: "123123123",
       role: "Regular",
     });
-    await request
+    const signinResponse = await request
       .post("/user/signin")
       .send({ email: "a@a.com", password: "123123123" });
-    let response = await request.get("/user/signout");
+    let response = await request
+      .get("/user/signout")
+      .set({ Cookie: signinResponse.headers["set-cookie"] });
     expect(response.status).toBe(201);
     expect(response.body.message).toBe("Success");
   });

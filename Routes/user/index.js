@@ -8,7 +8,7 @@ const {
   signupValidation,
   catchValidationErrors,
 } = require("../../validation/user.validation");
-
+const { userAuthorization } = require("./middleaware");
 router.post(
   "/signup",
   signupValidation,
@@ -43,7 +43,7 @@ router.post(
     }
   }
 );
-router.get("/signout", (req, res) => {
+router.get("/signout", userAuthorization, (req, res) => {
   try {
     res.clearCookie("token");
     res.status(201).json({ message: "Success" });
