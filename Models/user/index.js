@@ -12,7 +12,7 @@ async function createUser(user) {
     await newUser.save();
     return newUser;
   } catch (error) {
-    console.log(error);
+    return error;
   }
 }
 async function getUserByEmail(userEmail) {

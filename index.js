@@ -4,12 +4,15 @@ const config = require("config");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const userRouter = require("./Routes/user/index");
+const recordRouter = require("./Routes/record/restful");
+
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: "*" }));
 app.use("/user", userRouter);
+app.use("/record", recordRouter);
 mongoose.connect(
   `mongodb://${config.get("DB.host")}:${config.get("DB.port")}/${config.get(
     "DB.dbName"
