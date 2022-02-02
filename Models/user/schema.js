@@ -15,7 +15,7 @@ var userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["Regular,User manger,Admin"],
+    enum: ["Regular", "User manger", "Admin"],
     required: true,
   },
   deleteDate: {
