@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const recordModel = require("../../Models/records/shcema");
+const {
+  createValidation,
+  catchValidationErrors,
+} = require("../../validation/record.validation");
 const {
   createRecord,
   getRecordById,
@@ -10,7 +13,7 @@ const {
   deleteRecord,
 } = require("../../Models/records/index");
 
-router.post("/", async (req, res) => {
+router.post("/", createValidation, catchValidationErrors, async (req, res) => {
   const { date, time, distance, user_id } = req.body;
   try {
     const newRecord = await createRecord({
