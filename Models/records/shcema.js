@@ -5,7 +5,7 @@ var recordSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
   },
   date: {
-    type: Date,
+    type: String,
     required: true,
   },
   distance: {

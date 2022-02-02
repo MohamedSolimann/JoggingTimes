@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
-const reportSchema = require("./schema");
+const recordSchema = require("./shcema");
 
 async function createRecord(record) {
   try {
     record._id = mongoose.Types.ObjectId();
-    reocrd.createDate = new Date();
-    let newRecord = new reportSchema(record);
+    record.createDate = new Date();
+    let newRecord = new recordSchema(record);
     await newRecord.save();
     return newRecord;
   } catch (error) {
@@ -14,34 +14,45 @@ async function createRecord(record) {
 }
 async function getRecordById(recordId) {
   try {
-    const record = await reportSchema.findOne({ _id: recordId }).lean();
+    const record = await recordSchema.findOne({ _id: recordId }).lean();
     if (record) {
-      return user;
+      if (record.deletedDate) {
+        return "Record no longer exists!";
+      } else {
+        return record;
+      }
     } else {
       return "User not found";
     }
-  } catch (error) {}
+  } catch (error) {
+    return false;
+  }
 }
 async function getRecords() {
   try {
-    const records = await reportSchema.find();
-    if (record) {
+    const records = await recordSchema.find();
+    if (records.length) {
       return records;
     } else {
       return false;
     }
   } catch (error) {}
 }
-async function updatedRecord(recordId, data) {
+async function updateRecord(recordId, data) {
   try {
-    const updatedBody = updateRequestBody(data);
-    const updatedRecord = await reportSchema.findOneAndUpdate(
-      { _id: recordId },
-      { $set: updatedBody },
-      { new: true }
-    );
-    if (updatedRecord) {
-      return updatedRecord;
+    const record = await getRecordById(recordId);
+    if (record._id) {
+      const updatedBody = updateRequestBody(data);
+      const updatedRecord = await recordSchema.findOneAndUpdate(
+        { _id: recordId },
+        { $set: updatedBody },
+        { new: true }
+      );
+      if (updatedRecord) {
+        return updatedRecord;
+      } else {
+        return false;
+      }
     } else {
       return false;
     }
@@ -49,9 +60,9 @@ async function updatedRecord(recordId, data) {
 }
 async function deleteRecord(recordId) {
   try {
-    const record = await getReocrdById(recordId);
+    const record = await getRecordById(recordId);
     if (record) {
-      const deletedRecord = await reportSchema.updateOne(
+      const deletedRecord = await recordSchema.updateOne(
         { _id: recordId },
         { $set: { deleteDate: new Date() } }
       );
@@ -61,7 +72,7 @@ async function deleteRecord(recordId) {
         return false;
       }
     } else {
-      return "User not found";
+      return false;
     }
   } catch (error) {}
 }
@@ -88,6 +99,6 @@ module.exports = {
   createRecord,
   getRecordById,
   getRecords,
-  updatedRecord,
+  updateRecord,
   deleteRecord,
 };
