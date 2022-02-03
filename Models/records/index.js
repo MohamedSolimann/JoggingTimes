@@ -48,26 +48,20 @@ async function getRecords() {
 }
 async function updateRecord(recordId, data, signedInId) {
   try {
-    const record = await getRecordById(recordId);
-    if (record._id) {
-      const userRoleAuthorization = await userRoleAuth(
-        signedInId,
-        record.user_id.valueOf()
+    const record = await getRecordById(recordId, signedInId);
+    if (record === "User not Authorizied") {
+      return "User not Authorizied";
+    } else if (record._id) {
+      const updatedBody = updateRequestBody(data);
+      const updatedRecord = await recordSchema.findOneAndUpdate(
+        { _id: recordId },
+        { $set: updatedBody },
+        { new: true }
       );
-      if (userRoleAuthorization) {
-        const updatedBody = updateRequestBody(data);
-        const updatedRecord = await recordSchema.findOneAndUpdate(
-          { _id: recordId },
-          { $set: updatedBody },
-          { new: true }
-        );
-        if (updatedRecord) {
-          return updatedRecord;
-        } else {
-          return false;
-        }
+      if (updatedRecord) {
+        return updatedRecord;
       } else {
-        return "User not Authorizied";
+        return false;
       }
     } else {
       return false;

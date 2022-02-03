@@ -88,7 +88,7 @@ router.put("/:id", userAuthorization, async (req, res) => {
     } else if (updatedRecord) {
       res.status(201).json({ message: "Success", data: updatedRecord });
     } else {
-      res.status(201).json({ message: "Record not found" });
+      res.status(200).json({ message: "Record not found" });
     }
   } catch (error) {
     res.status(500).json({ message: "Error", error });
