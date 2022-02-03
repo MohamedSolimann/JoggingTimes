@@ -12,14 +12,22 @@ async function createRecord(record) {
     console.log(error);
   }
 }
-async function getRecordById(recordId) {
+async function getRecordById(recordId, signedInUserId) {
   try {
     const record = await recordSchema.findOne({ _id: recordId }).lean();
     if (record) {
       if (record.deleteDate) {
         return "Record no longer exists!";
       } else {
-        return record;
+        const userRoleAuthorization = await userRoleAuth(
+          signedInUserId,
+          record.user_id.valueOf()
+        );
+        if (userRoleAuthorization) {
+          return record;
+        } else {
+          return "User not Authorizied";
+        }
       }
     } else {
       return "User not found";

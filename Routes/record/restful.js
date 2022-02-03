@@ -55,13 +55,17 @@ router.get("/", userAuthorization, async (req, res) => {
 router.get("/:id", userAuthorization, async (req, res) => {
   const recordId = req.params.id;
   try {
-    let record = await getRecordById(recordId);
+    const token = req.cookies["token"];
+    const signedInUserId = getUserIdFromToken(token);
+    let record = await getRecordById(recordId, signedInUserId);
     if (record === "Record no longer exists!") {
       res.status(400).json({ message: "Record no longer exists!" });
     } else if (record === "Record not found") {
       res.status(400).json({ message: "Record not found" });
     } else if (record === "ObjectId") {
       res.status(400).json({ message: "Record id must be objectid" });
+    } else if (record === "User not Authorizied") {
+      res.status(403).json({ message: "User not Authorizied" });
     } else {
       res.status(200).json({ message: "Success", data: record });
     }
