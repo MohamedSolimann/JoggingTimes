@@ -30,7 +30,7 @@ async function getRecordById(recordId, signedInUserId) {
         }
       }
     } else {
-      return "User not found";
+      return "Record not found";
     }
   } catch (error) {
     return error.kind;
@@ -74,10 +74,16 @@ async function updateRecord(recordId, data, signedInId) {
     }
   } catch (error) {}
 }
-async function deleteRecord(recordId) {
+async function deleteRecord(recordId, signedInUserId) {
   try {
-    const record = await getRecordById(recordId);
-    if (record) {
+    const record = await getRecordById(recordId, signedInUserId);
+    if (record === "User not Authorizied") {
+      return "User not Authorizied";
+    } else if (record === "Record no longer exists!") {
+      return "Record no longer exists!";
+    } else if (record === "Record not found ") {
+      return "Record not found";
+    } else {
       const deletedRecord = await recordSchema.updateOne(
         { _id: recordId },
         { $set: { deleteDate: new Date() } }
@@ -87,8 +93,6 @@ async function deleteRecord(recordId) {
       } else {
         return false;
       }
-    } else {
-      return false;
     }
   } catch (error) {}
 }

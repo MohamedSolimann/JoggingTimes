@@ -97,11 +97,17 @@ router.put("/:id", userAuthorization, async (req, res) => {
 router.delete("/:id", userAuthorization, async (req, res) => {
   let recordId = req.params.id;
   try {
-    let record = await deleteRecord(recordId);
-    if (record) {
-      res.status(202).json({ message: "Success" });
+    const token = req.cookies["token"];
+    const signedInUserId = getUserIdFromToken(token);
+    let record = await deleteRecord(recordId, signedInUserId);
+    if (record === "User not Authorizied") {
+      res.status(403).json({ message: "Use not Authorizied" });
+    } else if (record === "Record no longer exists!") {
+      res.status(400).json({ message: "Record no longer exists!" });
+    } else if (record === "Record not found") {
+      res.status(400).json({ message: "Record not found" });
     } else {
-      res.status(200).json({ message: "Record not found" });
+      res.status(202).json({ message: "Success" });
     }
   } catch (error) {
     res.status(500).json({ message: "Error" });
