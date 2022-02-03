@@ -38,4 +38,14 @@ async function userAuthentication(email, password) {
     }
   } catch (error) {}
 }
-module.exports = { createUser, userAuthentication };
+async function getUserById(userId) {
+  try {
+    const user = await userModel.findOne({ _id: userId }).lean();
+    if (user) {
+      return user;
+    } else {
+      return false;
+    }
+  } catch (error) {}
+}
+module.exports = { createUser, userAuthentication, getUserById };

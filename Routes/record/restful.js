@@ -12,7 +12,8 @@ const {
   updateRecord,
   deleteRecord,
 } = require("../../Models/records/index");
-const { userAuthorization } = require("../user/middleaware");
+const { userAuthorization, getUserIdFromToken } = require("../user/middleware");
+
 router.post(
   "/",
   userAuthorization,
@@ -75,8 +76,12 @@ router.get("/:id", userAuthorization, async (req, res) => {
 router.put("/:id", userAuthorization, async (req, res) => {
   const recordId = req.params.id;
   try {
-    let updatedRecord = await updateRecord(recordId, req.body);
-    if (updatedRecord) {
+    const token = req.cookies["token"];
+    const signedInUserId = getUserIdFromToken(token);
+    let updatedRecord = await updateRecord(recordId, req.body, signedInUserId);
+    if (updatedRecord === "User not Authorizied") {
+      res.status(403).json({ message: "Use not Authorizied" });
+    } else if (updatedRecord) {
       res.status(201).json({ message: "Success", data: updatedRecord });
     } else {
       res.status(201).json({ message: "Record not found" });

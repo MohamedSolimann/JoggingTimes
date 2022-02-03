@@ -8,7 +8,7 @@ const {
   signupValidation,
   catchValidationErrors,
 } = require("../../validation/user.validation");
-const { userAuthorization } = require("./middleaware");
+const { userAuthorization } = require("./middleware");
 router.post(
   "/signup",
   signupValidation,

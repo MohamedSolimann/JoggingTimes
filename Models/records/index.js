@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const recordSchema = require("./shcema");
-
+const { userRoleAuth } = require("../../Routes/user/middleware");
 async function createRecord(record) {
   try {
     record._id = mongoose.Types.ObjectId();
@@ -38,20 +38,28 @@ async function getRecords() {
     }
   } catch (error) {}
 }
-async function updateRecord(recordId, data) {
+async function updateRecord(recordId, data, signedInId) {
   try {
     const record = await getRecordById(recordId);
     if (record._id) {
-      const updatedBody = updateRequestBody(data);
-      const updatedRecord = await recordSchema.findOneAndUpdate(
-        { _id: recordId },
-        { $set: updatedBody },
-        { new: true }
+      const userRoleAuthorization = await userRoleAuth(
+        signedInId,
+        record.user_id.valueOf()
       );
-      if (updatedRecord) {
-        return updatedRecord;
+      if (userRoleAuthorization) {
+        const updatedBody = updateRequestBody(data);
+        const updatedRecord = await recordSchema.findOneAndUpdate(
+          { _id: recordId },
+          { $set: updatedBody },
+          { new: true }
+        );
+        if (updatedRecord) {
+          return updatedRecord;
+        } else {
+          return false;
+        }
       } else {
-        return false;
+        return "User not Authorizied";
       }
     } else {
       return false;
