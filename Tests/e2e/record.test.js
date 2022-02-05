@@ -27,9 +27,7 @@ const createEndpointTestCases = () => {
       })
       .set({ Cookie: signinResponse.headers["set-cookie"] });
     expect(response.status).toBe(201);
-    expect(response.body.data.date.year).toBe("2022");
-    expect(response.body.data.date.month).toBe("2");
-    expect(response.body.data.date.day).toBe("4");
+    expect(response.body.data.date).toBe("2022-02-04T00:00:00.000Z");
     expect(response.body.data.distance).toBe("20k");
     expect(response.body.data.time).toBe("10mins");
   });
@@ -138,9 +136,7 @@ const readEndpointTestCases = () => {
       .get(`/record/${newRecord._id}`)
       .set({ Cookie: signinResponse.headers["set-cookie"] });
     expect(response.status).toBe(200);
-    expect(response.body.data.date.year).toBe("2022");
-    expect(response.body.data.date.month).toBe("2");
-    expect(response.body.data.date.day).toBe("4");
+    expect(response.body.data.date).toBe("2022-02-04T00:00:00.000Z");
     expect(response.body.data.distance).toBe("20k");
     expect(response.body.data.time).toBe("10mins");
   });
@@ -215,7 +211,7 @@ const readEndpointTestCases = () => {
       .send({ email: "a5@a.com", password: "123123123" });
     const newRecord = await createRecord({
       user_id: newUser._id,
-      date: { year: "2022", month: "2", day: "4" },
+      date: { year: "2022", month: "02", day: "04" },
       time: "10mins",
       distance: "20k",
     });
@@ -223,7 +219,7 @@ const readEndpointTestCases = () => {
       .get("/record")
       .set({ Cookie: signinResponse.headers["set-cookie"] });
     await deleteRecord(newRecord._id);
-    expect(response.body.data[0].date.year).toBe("2022");
+    expect(response.body.data[0].date).toBe("2022-02-04T00:00:00.000Z");
   });
 };
 const udpateEndpointTestCases = () => {

@@ -5,6 +5,10 @@ async function createRecord(record) {
   try {
     record._id = mongoose.Types.ObjectId();
     record.createDate = new Date();
+    if (record.date.month.length === 1)
+      record.date.month = "0".concat(record.date.month);
+    if (record.date.day.length === 1)
+      record.date.day = "0".concat(record.date.day);
     record.date = `${record.date.year}-${record.date.month}-${record.date.day}`;
     let newRecord = new recordSchema(record);
     await newRecord.save();
