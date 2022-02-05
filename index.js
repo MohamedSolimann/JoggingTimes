@@ -1,18 +1,19 @@
 const express = require("express");
+const app = express();
 const cors = require("cors");
 const config = require("config");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const userRouter = require("./Routes/user/index");
 const recordRouter = require("./Routes/record/restful");
-
-const app = express();
+const recordFilterRouter = require("./Routes/record/index");
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: "*", credentials: true }));
 app.use("/user", userRouter);
 app.use("/record", recordRouter);
+app.use("/recordfilter", recordFilterRouter);
 mongoose.connect(
   `mongodb://${config.get("DB.host")}:${config.get("DB.port")}/${config.get(
     "DB.dbName"

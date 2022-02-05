@@ -20,16 +20,8 @@ router.post(
   createValidation,
   catchValidationErrors,
   async (req, res) => {
-    const { date, time, distance, user_id } = req.body;
     try {
-      const newRecord = await createRecord({
-        _id: mongoose.Types.ObjectId(),
-        date,
-        time,
-        distance,
-        user_id,
-        createDate: new Date(),
-      });
+      const newRecord = await createRecord(req.body);
       if (newRecord) {
         res.status(201).json({ message: "Success", data: newRecord });
       } else {
