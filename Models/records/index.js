@@ -5,6 +5,7 @@ async function createRecord(record) {
   try {
     record._id = mongoose.Types.ObjectId();
     record.createDate = new Date();
+    record.date = `${record.date.year}-${record.date.month}-${record.date.day}`;
     let newRecord = new recordSchema(record);
     await newRecord.save();
     return newRecord;
@@ -39,6 +40,20 @@ async function getRecordById(recordId, signedInUserId) {
 async function getRecords() {
   try {
     const records = await recordSchema.find();
+    if (records.length) {
+      return records;
+    } else {
+      return false;
+    }
+  } catch (error) {}
+}
+async function getRecordsBetweenDates(fromDate, toDate) {
+  try {
+    fromDate = `${fromDate.year}-${fromDate.month}-${fromDate.day}`;
+    toDate = `${toDate.year}-${toDate.month}-${toDate.day}`;
+    const records = await recordSchema.find({
+      date: { $gte: fromDate, $lte: toDate },
+    });
     if (records.length) {
       return records;
     } else {
@@ -115,4 +130,5 @@ module.exports = {
   getRecords,
   updateRecord,
   deleteRecord,
+  getRecordsBetweenDates,
 };
