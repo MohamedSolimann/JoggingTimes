@@ -17,18 +17,19 @@ const createEndpointTestCases = () => {
     const signinResponse = await request
       .post("/user/signin")
       .send({ email: "mohamed@gmail.com", password: "12312312311" });
-    console.log(signinResponse.body);
     const response = await request
       .post("/record")
       .send({
         user_id: newUser._id,
-        date: "123123",
+        date: { year: "2022", month: "2", day: "4" },
         time: "10mins",
         distance: "20k",
       })
       .set({ Cookie: signinResponse.headers["set-cookie"] });
     expect(response.status).toBe(201);
-    expect(response.body.data.date).toBe("123123");
+    expect(response.body.data.date.year).toBe("2022");
+    expect(response.body.data.date.month).toBe("2");
+    expect(response.body.data.date.day).toBe("4");
     expect(response.body.data.distance).toBe("20k");
     expect(response.body.data.time).toBe("10mins");
   });
@@ -87,7 +88,7 @@ const createEndpointTestCases = () => {
       .post("/record")
       .send({
         user_id: newUser._id,
-        date: "123123",
+        date: { year: "2022", month: "2", day: "4" },
         time: "10mins",
         distance: "",
       })
@@ -129,7 +130,7 @@ const readEndpointTestCases = () => {
       .send({ email: "a1@a.com", password: "123123123" });
     const newRecord = await createRecord({
       user_id: newUser._id,
-      date: "123123",
+      date: { year: "2022", month: "2", day: "4" },
       time: "10mins",
       distance: "20k",
     });
@@ -137,7 +138,9 @@ const readEndpointTestCases = () => {
       .get(`/record/${newRecord._id}`)
       .set({ Cookie: signinResponse.headers["set-cookie"] });
     expect(response.status).toBe(200);
-    expect(response.body.data.date).toBe("123123");
+    expect(response.body.data.date.year).toBe("2022");
+    expect(response.body.data.date.month).toBe("2");
+    expect(response.body.data.date.day).toBe("4");
     expect(response.body.data.distance).toBe("20k");
     expect(response.body.data.time).toBe("10mins");
   });
@@ -152,7 +155,7 @@ const readEndpointTestCases = () => {
       .send({ email: "a2@a.com", password: "123123123" });
     const newRecord = await createRecord({
       user_id: newUser._id,
-      date: "123123",
+      date: { year: "2022", month: "2", day: "4" },
       time: "10mins",
       distance: "20k",
     });
@@ -174,7 +177,7 @@ const readEndpointTestCases = () => {
       .send({ email: "a3@a.com", password: "123123123" });
     const newRecord = await createRecord({
       user_id: newUser._id,
-      date: "123123",
+      date: { year: "2022", month: "2", day: "4" },
       time: "10mins",
       distance: "20k",
     });
@@ -193,7 +196,7 @@ const readEndpointTestCases = () => {
     });
     const newRecord = await createRecord({
       user_id: newUser._id,
-      date: "123123",
+      date: { year: "2022", month: "2", day: "4" },
       time: "10mins",
       distance: "20k",
     });
@@ -212,7 +215,7 @@ const readEndpointTestCases = () => {
       .send({ email: "a5@a.com", password: "123123123" });
     const newRecord = await createRecord({
       user_id: newUser._id,
-      date: "123123",
+      date: { year: "2022", month: "2", day: "4" },
       time: "10mins",
       distance: "20k",
     });
@@ -220,7 +223,7 @@ const readEndpointTestCases = () => {
       .get("/record")
       .set({ Cookie: signinResponse.headers["set-cookie"] });
     await deleteRecord(newRecord._id);
-    expect(response.body.data[0].date).toBe("123123");
+    expect(response.body.data[0].date.year).toBe("2022");
   });
 };
 const udpateEndpointTestCases = () => {
@@ -235,7 +238,7 @@ const udpateEndpointTestCases = () => {
       .send({ email: "a7@a.com", password: "123123123" });
     const newRecord = await createRecord({
       user_id: newUser._id,
-      date: "123123",
+      date: { year: "2022", month: "2", day: "4" },
       time: "10mins",
       distance: "20k",
     });
@@ -258,7 +261,7 @@ const udpateEndpointTestCases = () => {
     });
     const newRecord = await createRecord({
       user_id: newUser._id,
-      date: "123123",
+      date: { year: "2022", month: "2", day: "4" },
       time: "10mins",
       distance: "20k",
     });
@@ -281,7 +284,7 @@ const deleteEndpointTestCases = () => {
       .send({ email: "a9@a.com", password: "123123123" });
     const newRecord = await createRecord({
       user_id: newUser._id,
-      date: "123123",
+      date: { year: "2022", month: "2", day: "4" },
       time: "10mins",
       distance: "20k",
     });
@@ -303,7 +306,7 @@ const deleteEndpointTestCases = () => {
       .send({ email: "a@a.com", password: "123123123" });
     const newRecord = await createRecord({
       user_id: newUser._id,
-      date: "123123",
+      date: { year: "2022", month: "2", day: "4" },
       time: "10mins",
       distance: "20k",
     });
