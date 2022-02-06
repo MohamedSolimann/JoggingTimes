@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const recordSchema = require("./shcema");
+const recordModel = require("./shcema");
 const { userRoleAuth } = require("../../Routes/user/middleware");
 async function createRecord(record) {
   try {
@@ -10,7 +10,7 @@ async function createRecord(record) {
     if (record.date.day.length === 1)
       record.date.day = "0".concat(record.date.day);
     record.date = `${record.date.year}-${record.date.month}-${record.date.day}`;
-    let newRecord = new recordSchema(record);
+    let newRecord = new recordModel(record);
     await newRecord.save();
     return newRecord;
   } catch (error) {
@@ -19,7 +19,7 @@ async function createRecord(record) {
 }
 async function getRecordById(recordId, signedInUserId) {
   try {
-    const record = await recordSchema.findOne({ _id: recordId }).lean();
+    const record = await recordModel.findOne({ _id: recordId }).lean();
     if (record) {
       if (record.deleteDate) {
         return "Record no longer exists!";
@@ -43,7 +43,7 @@ async function getRecordById(recordId, signedInUserId) {
 }
 async function getRecords() {
   try {
-    const records = await recordSchema.find();
+    const records = await recordModel.find();
     if (records.length) {
       return records;
     } else {
@@ -55,7 +55,7 @@ async function getRecordsBetweenDates(fromDate, toDate) {
   try {
     fromDate = `${fromDate.year}-${fromDate.month}-${fromDate.day}`;
     toDate = `${toDate.year}-${toDate.month}-${toDate.day}`;
-    const records = await recordSchema.find({
+    const records = await recordModel.find({
       date: { $gte: fromDate, $lte: toDate },
     });
     if (records.length) {
@@ -72,7 +72,7 @@ async function updateRecord(recordId, data, signedInId) {
       return "User not Authorizied";
     } else if (record._id) {
       const updatedBody = updateRequestBody(data);
-      const updatedRecord = await recordSchema.findOneAndUpdate(
+      const updatedRecord = await recordModel.findOneAndUpdate(
         { _id: recordId },
         { $set: updatedBody },
         { new: true }
@@ -97,7 +97,7 @@ async function deleteRecord(recordId, signedInUserId) {
     } else if (record === "Record not found ") {
       return "Record not found";
     } else {
-      const deletedRecord = await recordSchema.updateOne(
+      const deletedRecord = await recordModel.updateOne(
         { _id: recordId },
         { $set: { deleteDate: new Date() } }
       );
@@ -109,7 +109,16 @@ async function deleteRecord(recordId, signedInUserId) {
     }
   } catch (error) {}
 }
-
+async function getRecordsOfUser(userId) {
+  try {
+    const records = await recordModel.find({ userId }).lean();
+    if (records.length) {
+      return records;
+    } else {
+      return false;
+    }
+  } catch (error) {}
+}
 function updateRequestBody(data) {
   let updatedBody = {};
   if (data.distance) {
@@ -135,4 +144,5 @@ module.exports = {
   updateRecord,
   deleteRecord,
   getRecordsBetweenDates,
+  getRecordsOfUser,
 };
