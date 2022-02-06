@@ -4,7 +4,7 @@ const cors = require("cors");
 const config = require("config");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
-const userRouter = require("./Routes/user/index");
+const userRouter = require("./Routes/user/restful");
 const recordRouter = require("./Routes/record/restful");
 const recordFilterRouter = require("./Routes/record/index");
 
