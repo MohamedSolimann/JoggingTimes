@@ -38,7 +38,7 @@ async function userAuthentication(email, password) {
     }
   } catch (error) {}
 }
-async function getUserById(userId) {
+async function getUserById(userId, signedInUserId) {
   try {
     const user = await userModel.findOne({ _id: userId }).lean();
     if (user) {
@@ -79,5 +79,27 @@ function updateRequestBody(data) {
   }
 
   return updatedBody;
+}
+async function deleteUser(userId, signedInUserId) {
+  try {
+    const user = await getUserById(userId, signedInUserId);
+    if (user === "User not Authorizied") {
+      return "User not Authorizied";
+    } else if (user === "User no longer exists!") {
+      return "User no longer exists!";
+    } else if (record === "User not found ") {
+      return "User not found";
+    } else {
+      const deletedUser = await recordModel.updateOne(
+        { _id: userId },
+        { $set: { deleteDate: new Date() } }
+      );
+      if (deletedUser) {
+        return deletedUser;
+      } else {
+        return false;
+      }
+    }
+  } catch (error) {}
 }
 module.exports = { createUser, userAuthentication, getUserById, updateUser };
