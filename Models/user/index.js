@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const userModel = require("./schema");
 const bcrypt = require("bcrypt");
+const { userRoleAuth } = require("../../Routes/user/middleware");
 
 async function createUser(user) {
   try {
@@ -42,24 +43,45 @@ async function getUserById(userId, signedInUserId) {
   try {
     const user = await userModel.findOne({ _id: userId }).lean();
     if (user) {
-      return user;
+      const userRoleAuthorization = await userRoleAuth(
+        signedInUserId,
+        user._id
+      );
+      if (userRoleAuthorization) {
+        if (user.deleteDate) {
+          return "User no longer exists!";
+        } else {
+          return record;
+        }
+      } else {
+        return "User not Authorizied";
+      }
     } else {
-      return false;
+      return "User not found";
     }
   } catch (error) {}
 }
-async function updateUser(userId, data) {
+async function updateUser(userId, data, signedInUserId) {
   try {
     const updatedBody = updateRequestBody(data);
-    const updatedUser = await userModel.findOneAndUpdate(
-      { _id: userId },
-      { $set: updatedBody },
-      { new: true }
-    );
-    if (updatedUser) {
-      return updatedUser;
+    const user = await getUserById(userId, signedInUserId);
+    if (user === "User not Authorizied") {
+      return "User not Authorizied";
+    } else if (user === "User no longer exists!") {
+      return "User no longer exists!";
+    } else if (record === "User not found ") {
+      return "User not found";
     } else {
-      return false;
+      const updatedUser = await userModel.findOneAndUpdate(
+        { _id: userId },
+        { $set: updatedBody },
+        { new: true }
+      );
+      if (updatedUser) {
+        return updatedUser;
+      } else {
+        return false;
+      }
     }
   } catch (error) {}
 }
@@ -102,4 +124,10 @@ async function deleteUser(userId, signedInUserId) {
     }
   } catch (error) {}
 }
-module.exports = { createUser, userAuthentication, getUserById, updateUser };
+module.exports = {
+  createUser,
+  userAuthentication,
+  getUserById,
+  updateUser,
+  deleteUser,
+};
