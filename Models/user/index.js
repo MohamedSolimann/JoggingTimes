@@ -48,4 +48,36 @@ async function getUserById(userId) {
     }
   } catch (error) {}
 }
-module.exports = { createUser, userAuthentication, getUserById };
+async function updateUser(userId, data) {
+  try {
+    const updatedBody = updateRequestBody(data);
+    const updatedUser = await userModel.findOneAndUpdate(
+      { _id: userId },
+      { $set: updatedBody },
+      { new: true }
+    );
+    if (updatedUser) {
+      return updatedUser;
+    } else {
+      return false;
+    }
+  } catch (error) {}
+}
+function updateRequestBody(data) {
+  let updatedBody = {};
+  if (data.lastReported) {
+    updatedBody.lastReported = data.lastReported;
+  }
+  if (data.email) {
+    updatedBody.lastReported = data.lastReported;
+  }
+  if (data.password) {
+    updatedBody.lastReported = data.lastReported;
+  }
+  if (data.role) {
+    updatedBody.lastReported = data.lastReported;
+  }
+
+  return updatedBody;
+}
+module.exports = { createUser, userAuthentication, getUserById, updateUser };
