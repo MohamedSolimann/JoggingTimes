@@ -2,29 +2,14 @@ const express = require("express");
 const router = express.Router();
 const config = require("config");
 const jwt = require("jsonwebtoken");
-const { createUser, userAuthentication } = require("../../Models/user/index");
+const { userAuthentication } = require("../../Models/user/index");
 const {
   signinValidation,
-  signupValidation,
   catchValidationErrors,
 } = require("../../validation/user.validation");
 const { userAuthorization } = require("./middleware");
 const { weeklyReports } = require("../../reports/index");
 
-router.post(
-  "/signup",
-  signupValidation,
-  catchValidationErrors,
-  async (req, res) => {
-    const user = req.body;
-    try {
-      const newUser = await createUser(user);
-      res.status(201).json({ message: "Success", data: newUser });
-    } catch (error) {
-      res.status(500).json({ message: "Server Error" });
-    }
-  }
-);
 router.post(
   "/signin",
   signinValidation,

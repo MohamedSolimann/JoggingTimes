@@ -1,6 +1,6 @@
 const config = require("config");
 const jwt = require("jsonwebtoken");
-const { getUserById } = require("../../Models/user/index");
+const userModel = require("../../Models/user/schema");
 const userAuthorization = (req, res, next) => {
   let token = req.cookies["token"];
   if (token) {
@@ -22,8 +22,8 @@ async function userRoleAuth(signedInId, userId) {
   if (signedInId === userId) {
     return true;
   }
-  const signedInUser = await getUserById(signedInId);
-  const user = await getUserById(userId);
+  const signedInUser = await getUserWithoutAuth(signedInId);
+  const user = await getUserWithoutAuth(userId);
   if (signedInUser.role === "Admin") {
     return true;
   } else if (signedInUser.role === "User Manager" && user.role !== "Admin") {
@@ -31,4 +31,23 @@ async function userRoleAuth(signedInId, userId) {
   }
   return false;
 }
-module.exports = { userAuthorization, getUserIdFromToken, userRoleAuth };
+async function getUserWithoutAuth(userId) {
+  try {
+    const user = await userModel.findOne({ _id: userId }).lean();
+    if (user) {
+      if (user.deleteDate) {
+        return "User no longer exists!";
+      } else {
+        return user;
+      }
+    } else {
+      return "User not found";
+    }
+  } catch (error) {}
+}
+module.exports = {
+  userAuthorization,
+  getUserIdFromToken,
+  userRoleAuth,
+  getUserWithAuth,
+};
