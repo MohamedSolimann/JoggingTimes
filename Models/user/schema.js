@@ -25,7 +25,9 @@ var userSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  lastReported: {
+    type: Date,
+  },
 });
 
-//Export the model
 module.exports = mongoose.model("User", userSchema);
