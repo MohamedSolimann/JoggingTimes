@@ -15,7 +15,7 @@ const createEndpointTestCases = () => {
       role: "Regular",
     });
     const signinResponse = await request
-      .post("/user/signin")
+      .post("/userauth/signin")
       .send({ email: "mohamed@gmail.com", password: "12312312311" });
     const response = await request
       .post("/record")
@@ -38,7 +38,7 @@ const createEndpointTestCases = () => {
       role: "Regular",
     });
     const signinResponse = await request
-      .post("/user/signin")
+      .post("/userauth/signin")
       .send({ email: "a1234@a.com", password: "123123123" });
     const response = await request
       .post("/record")
@@ -59,7 +59,7 @@ const createEndpointTestCases = () => {
       role: "Regular",
     });
     const signinResponse = await request
-      .post("/user/signin")
+      .post("/userauth/signin")
       .send({ email: "ab@a.com", password: "123123123" });
     const response = await request
       .post("/record")
@@ -80,7 +80,7 @@ const createEndpointTestCases = () => {
       role: "Regular",
     });
     const signinResponse = await request
-      .post("/user/signin")
+      .post("/userauth/signin")
       .send({ email: "abb@a.com", password: "123123123" });
     const response = await request
       .post("/record")
@@ -101,7 +101,7 @@ const createEndpointTestCases = () => {
       role: "Regular",
     });
     const signinResponse = await request
-      .post("/user/signin")
+      .post("/userauth/signin")
       .send({ email: "a1b@a.com", password: "123123123" });
     const response = await request
       .post("/record")
@@ -124,7 +124,7 @@ const readEndpointTestCases = () => {
       role: "Regular",
     });
     const signinResponse = await request
-      .post("/user/signin")
+      .post("/userauth/signin")
       .send({ email: "a1@a.com", password: "123123123" });
     const newRecord = await createRecord({
       user_id: newUser._id,
@@ -147,7 +147,7 @@ const readEndpointTestCases = () => {
       role: "Regular",
     });
     const signinResponse = await request
-      .post("/user/signin")
+      .post("/userauth/signin")
       .send({ email: "a2@a.com", password: "123123123" });
     const newRecord = await createRecord({
       user_id: newUser._id,
@@ -169,7 +169,7 @@ const readEndpointTestCases = () => {
       role: "Regular",
     });
     const signinResponse = await request
-      .post("/user/signin")
+      .post("/userauth/signin")
       .send({ email: "a3@a.com", password: "123123123" });
     const newRecord = await createRecord({
       user_id: newUser._id,
@@ -207,7 +207,7 @@ const readEndpointTestCases = () => {
       role: "Regular",
     });
     const signinResponse = await request
-      .post("/user/signin")
+      .post("/userauth/signin")
       .send({ email: "a5@a.com", password: "123123123" });
     const newRecord = await createRecord({
       user_id: newUser._id,
@@ -230,7 +230,7 @@ const udpateEndpointTestCases = () => {
       role: "Regular",
     });
     const signinResponse = await request
-      .post("/user/signin")
+      .post("/userauth/signin")
       .send({ email: "a7@a.com", password: "123123123" });
     const newRecord = await createRecord({
       user_id: newUser._id,
@@ -276,7 +276,7 @@ const deleteEndpointTestCases = () => {
       role: "Regular",
     });
     const signinResponse = await request
-      .post("/user/signin")
+      .post("/userauth/signin")
       .send({ email: "a9@a.com", password: "123123123" });
     const newRecord = await createRecord({
       user_id: newUser._id,
