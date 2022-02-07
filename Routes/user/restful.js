@@ -5,6 +5,7 @@ const {
   deleteUser,
   updateUser,
   getUserById,
+  getUsers,
 } = require("../../Models/user/index");
 const {
   signupValidation,
@@ -21,7 +22,22 @@ router.post("/", signupValidation, catchValidationErrors, async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 });
-
+router.get("/", userAuthorization, async (req, res) => {
+  try {
+    const token = req.cookies["token"];
+    const signedInUserId = getUserIdFromToken(token);
+    let users = await getUsers(signedInUserId);
+    if (users === "User not Authorizied") {
+      res.status(403).json({ message: "User not Authorizied" });
+    } else if (users.length) {
+      res.status(200).json({ message: "Success", data: users });
+    } else {
+      res.status(200).json({ message: "There is no Users!" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error", error });
+  }
+});
 router.get("/:id", userAuthorization, async (req, res) => {
   const userId = req.params.id;
   try {
@@ -47,6 +63,7 @@ router.get("/:id", userAuthorization, async (req, res) => {
     }
   }
 });
+
 router.put("/:id", userAuthorization, async (req, res) => {
   const userId = req.params.id;
   try {
