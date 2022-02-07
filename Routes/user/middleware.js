@@ -49,5 +49,5 @@ module.exports = {
   userAuthorization,
   getUserIdFromToken,
   userRoleAuth,
-  getUserWithAuth,
+  getUserWithoutAuth,
 };
