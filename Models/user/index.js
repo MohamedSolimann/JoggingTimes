@@ -39,19 +39,21 @@ async function userAuthentication(email, password) {
     }
   } catch (error) {}
 }
-async function getUserById(userId, signedInUserId) {
+async function getUserById(userId, signedInUserId, userRole) {
   try {
+    let userRoleAuthorization;
     const user = await userModel.findOne({ _id: userId }).lean();
     if (user) {
-      const userRoleAuthorization = await userRoleAuth(
-        signedInUserId,
-        user._id
-      );
+      if (userRole !== "Admin") {
+        userRoleAuthorization = await userRoleAuth(signedInUserId, user._id);
+      } else {
+        userRoleAuthorization = true;
+      }
       if (userRoleAuthorization) {
         if (user.deleteDate) {
           return "User no longer exists!";
         } else {
-          return record;
+          return user;
         }
       } else {
         return "User not Authorizied";
@@ -61,10 +63,24 @@ async function getUserById(userId, signedInUserId) {
     }
   } catch (error) {}
 }
-async function updateUser(userId, data, signedInUserId) {
+async function getUsers(signedInUserId, userRole) {
+  const signedInUser = await getUserById(signedInUserId, undefined, "Admin");
+  let users;
+  try {
+    if (signedInUser.role === "Admin" || userRole === "Admin") {
+      users = await userModel.find().lean();
+    } else if (signedInUser.role === "User Manager") {
+      users = await userModel.find({ role: "Regular" }).lean();
+    } else {
+      users = "User not Authorizied";
+    }
+    return users;
+  } catch (error) {}
+}
+async function updateUser(userId, data, signedInUserId, userRole) {
   try {
     const updatedBody = updateRequestBody(data);
-    const user = await getUserById(userId, signedInUserId);
+    const user = await getUserById(userId, signedInUserId, userRole);
     if (user === "User not Authorizied") {
       return "User not Authorizied";
     } else if (user === "User no longer exists!") {
@@ -124,10 +140,12 @@ async function deleteUser(userId, signedInUserId) {
     }
   } catch (error) {}
 }
+
 module.exports = {
   createUser,
   userAuthentication,
   getUserById,
   updateUser,
   deleteUser,
+  getUsers,
 };
