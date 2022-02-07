@@ -5,6 +5,7 @@ const config = require("config");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const userRouter = require("./Routes/user/restful");
+const userAuthRouter = require("./Routes/user/index");
 const recordRouter = require("./Routes/record/restful");
 const recordFilterRouter = require("./Routes/record/index");
 
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: "*", credentials: true }));
 app.use("/user", userRouter);
+app.use("/userauth", userAuthRouter);
 app.use("/record", recordRouter);
 app.use("/recordfilter", recordFilterRouter);
 mongoose.connect(
