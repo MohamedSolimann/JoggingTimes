@@ -51,11 +51,12 @@ async function getRecords() {
     }
   } catch (error) {}
 }
-async function getRecordsBetweenDates(fromDate, toDate) {
+async function getRecordsBetweenDates(userId, fromDate, toDate) {
   try {
     fromDate = `${fromDate.year}-${fromDate.month}-${fromDate.day}`;
     toDate = `${toDate.year}-${toDate.month}-${toDate.day}`;
     const records = await recordModel.find({
+      userId,
       date: { $gte: fromDate, $lte: toDate },
     });
     if (records.length) {
