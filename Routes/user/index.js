@@ -8,7 +8,6 @@ const {
   catchValidationErrors,
 } = require("../../validation/user.validation");
 const { userAuthorization } = require("./middleware");
-const { weeklyReports } = require("../../reports/index");
 
 router.post(
   "/signin",
@@ -19,7 +18,6 @@ router.post(
     try {
       const user = await userAuthentication(email, password);
       if (user) {
-        await weeklyReports();
         const token = jwt.sign({ id: user._id }, config.get("secret"));
         res.cookie("token", token);
         res.status(200).json({ message: "Success" });
