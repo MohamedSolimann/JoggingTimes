@@ -162,28 +162,7 @@ const readEndpointTestCases = () => {
     expect(response.status).toBe(400);
     expect(response.body.message).toBe("Record id must be objectid");
   });
-  it("Suppose to get error record no longer exists ", async () => {
-    const newUser = await createUser({
-      email: "a3@a.com",
-      password: "123123123",
-      role: "Regular",
-    });
-    const signinResponse = await request
-      .post("/userauth/signin")
-      .send({ email: "a3@a.com", password: "123123123" });
-    const newRecord = await createRecord({
-      user_id: newUser._id,
-      date: { year: "2022", month: "2", day: "4" },
-      time: "10mins",
-      distance: "20k",
-    });
-    await deleteRecord(newRecord._id);
-    const response = await request
-      .get(`/record/${newRecord._id}`)
-      .set({ Cookie: signinResponse.headers["set-cookie"] });
-    expect(response.status).toBe(400);
-    expect(response.body.message).toBe("Record no longer exists!");
-  });
+
   it("Suppose to get error not authorizied ", async () => {
     const newUser = await createUser({
       email: "a4@a.com",
@@ -218,7 +197,6 @@ const readEndpointTestCases = () => {
     const response = await request
       .get("/record")
       .set({ Cookie: signinResponse.headers["set-cookie"] });
-    await deleteRecord(newRecord._id);
     expect(response.body.data[0].date).toBe("2022-02-04T00:00:00.000Z");
   });
 };
@@ -244,9 +222,9 @@ const udpateEndpointTestCases = () => {
       .send({ distance: "10k" })
       .set({ Cookie: signinResponse.headers["set-cookie"] });
     await deleteRecord(newRecord._id);
-    let updatedRole = response.body.data.role;
+    let updatedDistance = response.body.data.distance;
     expect(response.status).toBe(201);
-    expect(oldDistance).not.toEqual(updatedRole);
+    expect(oldDistance).not.toEqual(updatedDistance);
     expect(response.body.data.distance).toEqual("10k");
   });
   it("Suppose to get error not authorizied ", async () => {
@@ -269,7 +247,7 @@ const udpateEndpointTestCases = () => {
   });
 };
 const deleteEndpointTestCases = () => {
-  it("Suppose to delete user ", async () => {
+  it("Suppose to delete record ", async () => {
     const newUser = await createUser({
       email: "a9@a.com",
       password: "123123123",
@@ -279,7 +257,7 @@ const deleteEndpointTestCases = () => {
       .post("/userauth/signin")
       .send({ email: "a9@a.com", password: "123123123" });
     const newRecord = await createRecord({
-      user_id: newUser._id,
+      user_id: newUser._id.valueOf(),
       date: { year: "2022", month: "2", day: "4" },
       time: "10mins",
       distance: "20k",

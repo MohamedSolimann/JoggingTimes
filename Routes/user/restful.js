@@ -28,7 +28,7 @@ router.get("/", userAuthorization, async (req, res) => {
     const signedInUserId = getUserIdFromToken(token);
     let users = await getUsers(signedInUserId);
     if (users === "User not Authorizied") {
-      res.status(403).json({ message: "User not Authorizied" });
+      res.status(401).json({ message: "User not Authorizied" });
     } else if (users.length) {
       res.status(200).json({ message: "Success", data: users });
     } else {
@@ -51,13 +51,13 @@ router.get("/:id", userAuthorization, async (req, res) => {
     } else if (user === "ObjectId") {
       res.status(400).json({ message: "User id must be objectid" });
     } else if (user === "User not Authorizied") {
-      res.status(403).json({ message: "User not Authorizied" });
+      res.status(401).json({ message: "User not Authorizied" });
     } else {
       res.status(200).json({ message: "Success", data: user });
     }
   } catch (error) {
     if (error.kind === "ObjectId") {
-      res.status(400).json({ message: "Please check the user id" });
+      res.status(400).json({ message: "User id must be objectid" });
     } else {
       res.status(500).json({ message: "Error", error });
     }
@@ -71,7 +71,7 @@ router.put("/:id", userAuthorization, async (req, res) => {
     const signedInUserId = getUserIdFromToken(token);
     let updatedUser = await updateUser(userId, req.body, signedInUserId);
     if (updatedUser === "User not Authorizied") {
-      res.status(403).json({ message: "Use not Authorizied" });
+      res.status(401).json({ message: "Use not Authorizied" });
     } else if (updatedUser) {
       res.status(201).json({ message: "Success", data: updatedUser });
     } else {
@@ -88,7 +88,7 @@ router.delete("/:id", userAuthorization, async (req, res) => {
     const signedInUserId = getUserIdFromToken(token);
     let user = await deleteUser(userId, signedInUserId);
     if (user === "User not Authorizied") {
-      res.status(403).json({ message: "Use not Authorizied" });
+      res.status(401).json({ message: "Use not Authorizied" });
     } else if (user === "User no longer exists!") {
       res.status(400).json({ message: "User no longer exists!" });
     } else if (user === "User not found") {

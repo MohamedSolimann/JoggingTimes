@@ -61,7 +61,9 @@ async function getUserById(userId, signedInUserId, userRole) {
     } else {
       return "User not found";
     }
-  } catch (error) {}
+  } catch (error) {
+    return "ObjectId";
+  }
 }
 async function getUsers(signedInUserId, userRole) {
   const signedInUser = await getUserById(signedInUserId, undefined, "Admin");
@@ -85,7 +87,7 @@ async function updateUser(userId, data, signedInUserId, userRole) {
       return "User not Authorizied";
     } else if (user === "User no longer exists!") {
       return "User no longer exists!";
-    } else if (record === "User not found ") {
+    } else if (user === "User not found ") {
       return "User not found";
     } else {
       const updatedUser = await userModel.findOneAndUpdate(
@@ -106,14 +108,17 @@ function updateRequestBody(data) {
   if (data.lastReported) {
     updatedBody.lastReported = data.lastReported;
   }
+  if (data.deleteDate) {
+    updatedBody.deleteDate = data.deleteDate;
+  }
   if (data.email) {
-    updatedBody.lastReported = data.lastReported;
+    updatedBody.email = data.email;
   }
   if (data.password) {
-    updatedBody.lastReported = data.lastReported;
+    updatedBody.lastRpasswordeported = data.password;
   }
   if (data.role) {
-    updatedBody.lastReported = data.lastReported;
+    updatedBody.role = data.role;
   }
 
   return updatedBody;
@@ -125,10 +130,10 @@ async function deleteUser(userId, signedInUserId) {
       return "User not Authorizied";
     } else if (user === "User no longer exists!") {
       return "User no longer exists!";
-    } else if (record === "User not found ") {
+    } else if (user === "User not found ") {
       return "User not found";
     } else {
-      const deletedUser = await recordModel.updateOne(
+      const deletedUser = await userModel.updateOne(
         { _id: userId },
         { $set: { deleteDate: new Date() } }
       );
