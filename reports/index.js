@@ -1,6 +1,11 @@
+const schedule = require("node-schedule");
 const { createReport } = require("../Models/report/index");
 const { getRecordsBetweenDates } = require("../Models/records/index");
 const { updateUser, getUsers } = require("../Models/user/index");
+
+const job = schedule.scheduleJob("0 0 * * *", () => {
+  weeklyReports();
+});
 
 async function weeklyReports() {
   let lastReportedDate, diffTime, diffWeeks, from, to, userId;

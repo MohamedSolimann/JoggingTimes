@@ -19,6 +19,7 @@
     "jest": "^27.4.7",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.9",
+    "node-schedule": "^2.1.0",
     "supertest": "^6.2.2"
   }
 }
