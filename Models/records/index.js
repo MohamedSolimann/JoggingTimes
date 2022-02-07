@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const recordModel = require("./shcema");
 const { userRoleAuth } = require("../../Routes/user/middleware");
+const { getUserById } = require("../user/index");
 async function createRecord(record) {
   try {
     record._id = mongoose.Types.ObjectId();
@@ -41,14 +42,17 @@ async function getRecordById(recordId, signedInUserId) {
     return error.kind;
   }
 }
-async function getRecords() {
+async function getRecords(signedInUserId, userRole) {
   try {
-    const records = await recordModel.find();
-    if (records.length) {
-      return records;
+    const signedInUser = await getUserById(signedInUserId, undefined, "Admin");
+    if (signedInUser.role === "Admin" || userRole === "Admin") {
+      records = await recordModel.find().lean();
+    } else if (signedInUser.role === "User Manager") {
+      records = await recordModel.find({ role: "Regular" }).lean();
     } else {
-      return false;
+      records = await recordModel.find({ user_id: signedInUserId }).lean();
     }
+    return records;
   } catch (error) {}
 }
 async function getRecordsBetweenDates(userId, fromDate, toDate) {

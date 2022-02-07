@@ -34,8 +34,10 @@ router.post(
 );
 router.get("/", userAuthorization, async (req, res) => {
   try {
-    const records = await getRecords();
-    if (records) {
+    const token = req.cookies["token"];
+    const signedInUserId = getUserIdFromToken(token);
+    const records = await getRecords(signedInUserId);
+    if (records.length) {
       res.status(200).json({ message: "Success", data: records });
     } else {
       res.status(200).json({ message: "There is no Records!" });
