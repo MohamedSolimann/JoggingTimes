@@ -19,7 +19,7 @@ router.post(
     try {
       const user = await userAuthentication(email, password);
       if (user) {
-        await weeklyReports(user.lastReported, user._id, user.createDate);
+        await weeklyReports();
         const token = jwt.sign({ id: user._id }, config.get("secret"));
         res.cookie("token", token);
         res.status(200).json({ message: "Success" });
