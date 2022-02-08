@@ -1,6 +1,3 @@
-const { userRoleAuth } = require("../../Routes/user/middleware");
-const { getUserById } = require("../user/index");
-
 async function updateRecord(recordId, data, signedInId) {
   try {
     const record = await getRecordById(recordId, signedInId);
@@ -23,38 +20,7 @@ async function updateRecord(recordId, data, signedInId) {
     }
   } catch (error) {}
 }
-async function deleteRecord(recordId, signedInUserId) {
-  try {
-    const record = await getRecordById(recordId, signedInUserId);
-    if (record === "User not Authorizied") {
-      return "User not Authorizied";
-    } else if (record === "Record no longer exists!") {
-      return "Record no longer exists!";
-    } else if (record === "Record not found ") {
-      return "Record not found";
-    } else {
-      const deletedRecord = await recordModel.updateOne(
-        { _id: recordId },
-        { $set: { deleteDate: new Date() } }
-      );
-      if (deletedRecord) {
-        return deletedRecord;
-      } else {
-        return false;
-      }
-    }
-  } catch (error) {}
-}
-async function getRecordsOfUser(userId) {
-  try {
-    const records = await recordModel.find({ userId }).lean();
-    if (records.length) {
-      return records;
-    } else {
-      return false;
-    }
-  } catch (error) {}
-}
+
 function updateRequestBody(data, recordDate) {
   let updatedBody = {};
   let dateObj = {};
@@ -80,13 +46,4 @@ function updateRequestBody(data, recordDate) {
   }
   return updatedBody;
 }
-
-module.exports = {
-  createRecord,
-  getRecordById,
-  getRecords,
-  updateRecord,
-  deleteRecord,
-  getRecordsBetweenDates,
-  getRecordsOfUser,
-};
+module.exports = { updateRecord };
