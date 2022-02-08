@@ -19,7 +19,11 @@ router.post("/", signupValidation, catchValidationErrors, async (req, res) => {
     const newUser = await createUser(user);
     res.status(201).json({ message: "Success", data: newUser });
   } catch (error) {
-    res.status(500).json({ message: "Server Error" });
+    if (error.message === "Email already exists") {
+      res.status(400).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: "Server Error" });
+    }
   }
 });
 router.get("/", userAuthorization, async (req, res) => {

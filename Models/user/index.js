@@ -5,12 +5,16 @@ const { userRoleAuth } = require("../../Routes/user/middleware");
 
 async function createUser(user) {
   try {
+    const commonEmail = await getUserByEmail(user.email);
+    if (commonEmail) {
+      throw new Error("Email already exists");
+    }
     const updatedUser = updatedUserForCreation(user);
     let newUser = new userModel(updatedUser);
     await newUser.save();
     return newUser;
   } catch (error) {
-    return error;
+    throw error;
   }
 }
 function updatedUserForCreation(user) {
@@ -24,11 +28,13 @@ async function getUserByEmail(userEmail) {
   try {
     const user = await userModel.findOne({ email: userEmail }).lean();
     if (user) {
-      return user;
+      return true;
     } else {
       return false;
     }
-  } catch (error) {}
+  } catch (error) {
+    return error;
+  }
 }
 async function userAuthentication(email, password) {
   try {
