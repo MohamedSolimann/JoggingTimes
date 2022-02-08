@@ -21,7 +21,9 @@ router.post(
   catchValidationErrors,
   async (req, res) => {
     try {
-      const newRecord = await createRecord(req.body);
+      const token = req.cookies["token"];
+      const userId = getUserIdFromToken(token);
+      const newRecord = await createRecord(req.body, userId);
       if (newRecord) {
         res.status(201).json({ message: "Success", data: newRecord });
       } else {

@@ -2,10 +2,11 @@ const mongoose = require("mongoose");
 const recordModel = require("./shcema");
 const { userRoleAuth } = require("../../Routes/user/middleware");
 const { getUserById } = require("../user/index");
-async function createRecord(record) {
+async function createRecord(record, userId) {
   try {
     record._id = mongoose.Types.ObjectId();
     record.createDate = new Date();
+    record.user_id = userId;
     if (record.date.month.length === 1)
       record.date.month = "0".concat(record.date.month);
     if (record.date.day.length === 1)
