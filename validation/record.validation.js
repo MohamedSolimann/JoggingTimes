@@ -18,7 +18,6 @@ module.exports = {
     body("time").trim(),
     body("distance").not().isEmpty(),
     body("distance").trim(),
-    body("user_id").not().isEmpty(),
   ],
   fitlerByDateValidation: [
     body("from.year").not().isEmpty(),

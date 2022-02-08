@@ -20,7 +20,6 @@ const createEndpointTestCases = () => {
     const response = await request
       .post("/record")
       .send({
-        user_id: newUser._id,
         date: { year: "2022", month: "2", day: "4" },
         time: "10mins",
         distance: "20k",
@@ -43,7 +42,6 @@ const createEndpointTestCases = () => {
     const response = await request
       .post("/record")
       .send({
-        user_id: newUser._id,
         date: "",
         time: "10mins",
         distance: "20k",
@@ -64,7 +62,6 @@ const createEndpointTestCases = () => {
     const response = await request
       .post("/record")
       .send({
-        user_id: newUser._id,
         date: "123",
         time: "",
         distance: "20k",
@@ -85,7 +82,6 @@ const createEndpointTestCases = () => {
     const response = await request
       .post("/record")
       .send({
-        user_id: newUser._id,
         date: { year: "2022", month: "2", day: "4" },
         time: "10mins",
         distance: "",
@@ -106,7 +102,6 @@ const createEndpointTestCases = () => {
     const response = await request
       .post("/record")
       .send({
-        user_id: newUser._id,
         date: "",
         time: "10mins",
         distance: "20k",
@@ -126,12 +121,14 @@ const readEndpointTestCases = () => {
     const signinResponse = await request
       .post("/userauth/signin")
       .send({ email: "a1@a.com", password: "123123123" });
-    const newRecord = await createRecord({
-      user_id: newUser._id,
-      date: { year: "2022", month: "2", day: "4" },
-      time: "10mins",
-      distance: "20k",
-    });
+    const newRecord = await createRecord(
+      {
+        date: { year: "2022", month: "2", day: "4" },
+        time: "10mins",
+        distance: "20k",
+      },
+      newUser._id
+    );
     const response = await request
       .get(`/record/${newRecord._id}`)
       .set({ Cookie: signinResponse.headers["set-cookie"] });
@@ -149,12 +146,14 @@ const readEndpointTestCases = () => {
     const signinResponse = await request
       .post("/userauth/signin")
       .send({ email: "a2@a.com", password: "123123123" });
-    const newRecord = await createRecord({
-      user_id: newUser._id,
-      date: { year: "2022", month: "2", day: "4" },
-      time: "10mins",
-      distance: "20k",
-    });
+    const newRecord = await createRecord(
+      {
+        date: { year: "2022", month: "2", day: "4" },
+        time: "10mins",
+        distance: "20k",
+      },
+      newUser._id
+    );
     let recordId = "Invalid record id";
     const response = await request
       .get(`/record/${recordId}`)
@@ -169,12 +168,14 @@ const readEndpointTestCases = () => {
       password: "123123123",
       role: "Regular",
     });
-    const newRecord = await createRecord({
-      user_id: newUser._id,
-      date: { year: "2022", month: "2", day: "4" },
-      time: "10mins",
-      distance: "20k",
-    });
+    const newRecord = await createRecord(
+      {
+        date: { year: "2022", month: "2", day: "4" },
+        time: "10mins",
+        distance: "20k",
+      },
+      newUser._id
+    );
     const response = await request.get(`/record/${newRecord._id}`);
     expect(response.status).toBe(401);
     expect(response.body.message).toBe("User not authorizied");
@@ -188,12 +189,14 @@ const readEndpointTestCases = () => {
     const signinResponse = await request
       .post("/userauth/signin")
       .send({ email: "a5@a.com", password: "123123123" });
-    const newRecord = await createRecord({
-      user_id: newUser._id,
-      date: { year: "2022", month: "02", day: "04" },
-      time: "10mins",
-      distance: "20k",
-    });
+    const newRecord = await createRecord(
+      {
+        date: { year: "2022", month: "02", day: "04" },
+        time: "10mins",
+        distance: "20k",
+      },
+      newUser._id
+    );
     const response = await request
       .get("/record")
       .set({ Cookie: signinResponse.headers["set-cookie"] });
@@ -210,12 +213,14 @@ const udpateEndpointTestCases = () => {
     const signinResponse = await request
       .post("/userauth/signin")
       .send({ email: "a7@a.com", password: "123123123" });
-    const newRecord = await createRecord({
-      user_id: newUser._id,
-      date: { year: "2022", month: "2", day: "4" },
-      time: "10mins",
-      distance: "20k",
-    });
+    const newRecord = await createRecord(
+      {
+        date: { year: "2022", month: "2", day: "4" },
+        time: "10mins",
+        distance: "20k",
+      },
+      newUser._id
+    );
     let oldDistance = newRecord.distance;
     const response = await request
       .put(`/record/${newRecord._id}`)
@@ -232,12 +237,14 @@ const udpateEndpointTestCases = () => {
       password: "123123123",
       role: "Regular",
     });
-    const newRecord = await createRecord({
-      user_id: newUser._id,
-      date: { year: "2022", month: "2", day: "4" },
-      time: "10mins",
-      distance: "20k",
-    });
+    const newRecord = await createRecord(
+      {
+        date: { year: "2022", month: "2", day: "4" },
+        time: "10mins",
+        distance: "20k",
+      },
+      newUser._id
+    );
     const response = await request
       .put(`/record/${newRecord._id}`)
       .send({ date: "test name" });
@@ -255,12 +262,14 @@ const deleteEndpointTestCases = () => {
     const signinResponse = await request
       .post("/userauth/signin")
       .send({ email: "a9@a.com", password: "123123123" });
-    const newRecord = await createRecord({
-      user_id: newUser._id.valueOf(),
-      date: { year: "2022", month: "2", day: "4" },
-      time: "10mins",
-      distance: "20k",
-    });
+    const newRecord = await createRecord(
+      {
+        date: { year: "2022", month: "2", day: "4" },
+        time: "10mins",
+        distance: "20k",
+      },
+      newUser._id
+    );
     let recordId = newRecord._id;
     let response = await request
       .delete(`/record/${recordId}`)
@@ -277,12 +286,14 @@ const deleteEndpointTestCases = () => {
     const signinResponse = await request
       .post("/user/signin")
       .send({ email: "a@a.com", password: "123123123" });
-    const newRecord = await createRecord({
-      user_id: newUser._id,
-      date: { year: "2022", month: "2", day: "4" },
-      time: "10mins",
-      distance: "20k",
-    });
+    const newRecord = await createRecord(
+      {
+        date: { year: "2022", month: "2", day: "4" },
+        time: "10mins",
+        distance: "20k",
+      },
+      newUser._id
+    );
     let response = await request.delete(`/record/${newRecord._id}`);
     expect(response.status).toBe(401);
     expect(response.body.message).toEqual("User not authorizied");
