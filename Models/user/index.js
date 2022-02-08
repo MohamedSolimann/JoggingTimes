@@ -5,16 +5,20 @@ const { userRoleAuth } = require("../../Routes/user/middleware");
 
 async function createUser(user) {
   try {
-    const encryptedPassword = bcrypt.hashSync(user.password, 9);
-    user.password = encryptedPassword;
-    user._id = mongoose.Types.ObjectId();
-    user.createDate = new Date();
-    let newUser = new userModel(user);
+    const updatedUser = updatedUserForCreation(user);
+    let newUser = new userModel(updatedUser);
     await newUser.save();
     return newUser;
   } catch (error) {
     return error;
   }
+}
+function updatedUserForCreation(user) {
+  const encryptedPassword = bcrypt.hashSync(user.password, 9);
+  user.password = encryptedPassword;
+  user._id = mongoose.Types.ObjectId();
+  user.createDate = new Date();
+  return user;
 }
 async function getUserByEmail(userEmail) {
   try {
