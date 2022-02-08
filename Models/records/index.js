@@ -9,7 +9,7 @@ async function createRecord(record, userId) {
     await newRecord.save();
     return newRecord;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 }
 function udpateRecordForCreation(record, userId) {
