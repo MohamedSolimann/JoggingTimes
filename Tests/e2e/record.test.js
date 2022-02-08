@@ -221,7 +221,6 @@ const udpateEndpointTestCases = () => {
       .put(`/record/${newRecord._id}`)
       .send({ distance: "10k" })
       .set({ Cookie: signinResponse.headers["set-cookie"] });
-    await deleteRecord(newRecord._id);
     let updatedDistance = response.body.data.distance;
     expect(response.status).toBe(201);
     expect(oldDistance).not.toEqual(updatedDistance);
