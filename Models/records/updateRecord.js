@@ -1,3 +1,4 @@
+const { getRecordById } = require("./readRecord");
 async function updateRecord(recordId, data, signedInId) {
   try {
     const record = await getRecordById(recordId, signedInId);
