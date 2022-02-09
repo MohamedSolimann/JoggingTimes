@@ -54,20 +54,8 @@ async function getRecordsBetweenDates(userId, fromDate, toDate) {
     }
   } catch (error) {}
 }
-async function getRecordsOfUser(userId) {
-  try {
-    const records = await recordModel.find({ userId }).lean();
-    if (records.length) {
-      return records;
-    } else {
-      return false;
-    }
-  } catch (error) {}
-}
-
 module.exports = {
   getRecordById,
   getRecords,
   getRecordsBetweenDates,
-  getRecordsOfUser,
 };
