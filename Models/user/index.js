@@ -28,7 +28,7 @@ async function getUserByEmail(userEmail) {
   try {
     const user = await userModel.findOne({ email: userEmail }).lean();
     if (user) {
-      return true;
+      return user;
     } else {
       return false;
     }
