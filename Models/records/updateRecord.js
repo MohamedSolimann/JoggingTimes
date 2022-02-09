@@ -1,4 +1,5 @@
 const { getRecordById } = require("./readRecord");
+const recordModel = require("./shcema");
 async function updateRecord(recordId, data, signedInId) {
   try {
     const record = await getRecordById(recordId, signedInId);
