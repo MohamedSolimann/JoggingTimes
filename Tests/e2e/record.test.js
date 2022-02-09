@@ -1,7 +1,7 @@
 const supertest = require("supertest");
 const app = require("../../index");
 const request = supertest(app);
-const { createRecord, deleteRecord } = require("../../Models/records/index");
+const { createRecord } = require("../../Models/records/createRecord");
 const { createUser } = require("../../Models/user/index");
 const { setupDB } = require("../testDbSetup");
 
