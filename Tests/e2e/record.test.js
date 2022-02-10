@@ -159,7 +159,7 @@ const readEndpointTestCases = () => {
       .get(`/record/${recordId}`)
       .set({ Cookie: signinResponse.headers["set-cookie"] });
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe("Record id must be objectid");
+    expect(response.body.message).toBe("Please check the record id");
   });
 
   it("Suppose to get error not authorizied ", async () => {
@@ -200,7 +200,6 @@ const readEndpointTestCases = () => {
     const response = await request
       .get("/record")
       .set({ Cookie: signinResponse.headers["set-cookie"] });
-    console.log(response.body);
     expect(response.body.data[0].date).toBe("2022-02-04T00:00:00.000Z");
   });
 };

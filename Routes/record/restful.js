@@ -58,15 +58,13 @@ router.get("/:id", userAuthorization, async (req, res) => {
       res.status(400).json({ message: "Record no longer exists!" });
     } else if (record === "Record not found") {
       res.status(400).json({ message: "Record not found" });
-    } else if (record === "ObjectId") {
-      res.status(400).json({ message: "Record id must be objectid" });
     } else if (record === "User not Authorizied") {
       res.status(403).json({ message: "User not Authorizied" });
     } else {
       res.status(200).json({ message: "Success", data: record });
     }
   } catch (error) {
-    if (error.kind === "ObjectId") {
+    if (error === "ObjectId") {
       res.status(400).json({ message: "Please check the record id" });
     } else {
       res.status(500).json({ message: "Error", error });

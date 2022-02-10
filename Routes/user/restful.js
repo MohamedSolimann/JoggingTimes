@@ -60,7 +60,7 @@ router.get("/:id", userAuthorization, async (req, res) => {
       res.status(200).json({ message: "Success", data: user });
     }
   } catch (error) {
-    if (error.kind === "ObjectId") {
+    if (error === "ObjectId") {
       res.status(400).json({ message: "User id must be objectid" });
     } else {
       res.status(500).json({ message: "Error", error });

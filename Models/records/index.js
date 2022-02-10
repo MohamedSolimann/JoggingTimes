@@ -34,7 +34,7 @@ async function getRecordById(recordId, signedInUserId) {
       return "Record not found";
     }
   } catch (error) {
-    throw error.kind;
+    throw "ObjectId";
   }
 }
 async function getRecords(signedInUserId, userRole) {
