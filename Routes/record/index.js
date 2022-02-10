@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { getRecordsBetweenDates } = require("../../Models/records/readRecord");
+const { getRecordsBetweenDates } = require("../../Models/records/index");
 const { userAuthorization } = require("../user/middleware");
 const {
   catchValidationErrors,

@@ -1,7 +1,7 @@
 const supertest = require("supertest");
 const app = require("../../index");
 const request = supertest(app);
-const { createRecord } = require("../../Models/records/createRecord");
+const { createRecord } = require("../../Models/records/index");
 const { createUser } = require("../../Models/user/index");
 const { setupDB } = require("../testDbSetup");
 
@@ -200,6 +200,7 @@ const readEndpointTestCases = () => {
     const response = await request
       .get("/record")
       .set({ Cookie: signinResponse.headers["set-cookie"] });
+    console.log(response.body);
     expect(response.body.data[0].date).toBe("2022-02-04T00:00:00.000Z");
   });
 };

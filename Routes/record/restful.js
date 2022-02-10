@@ -5,13 +5,13 @@ const {
   createValidation,
   catchValidationErrors,
 } = require("../../validation/record.validation");
-const { createRecord } = require("../../Models/records/createRecord");
 const {
+  createRecord,
   getRecordById,
   getRecords,
-} = require("../../Models/records//readRecord");
-const { deleteRecord } = require("../../Models/records/deleteRecord");
-const { updateRecord } = require("../../Models/records/updateRecord");
+  deleteRecord,
+  updateRecord,
+} = require("../../Models/records/index");
 const { userAuthorization, getUserIdFromToken } = require("../user/middleware");
 
 router.post(
