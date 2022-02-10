@@ -4,18 +4,14 @@ const bcrypt = require("bcrypt");
 const { userRoleAuth } = require("../../Routes/user/middleware");
 
 async function createUser(user) {
-  try {
-    const commonEmail = await getUserByEmail(user.email);
-    if (commonEmail) {
-      throw new Error("Email already exists");
-    }
-    const updatedUser = updatedUserForCreation(user);
-    let newUser = new userModel(updatedUser);
-    await newUser.save();
-    return newUser;
-  } catch (error) {
-    throw error;
+  const commonEmail = await getUserByEmail(user.email);
+  if (commonEmail) {
+    throw new Error("Email already exists");
   }
+  const updatedUser = updatedUserForCreation(user);
+  let newUser = new userModel(updatedUser);
+  await newUser.save();
+  return newUser;
 }
 function updatedUserForCreation(user) {
   const encryptedPassword = bcrypt.hashSync(user.password, 9);
@@ -33,7 +29,7 @@ async function getUserByEmail(userEmail) {
       return false;
     }
   } catch (error) {
-    return error;
+    throw error;
   }
 }
 async function userAuthentication(email, password) {
@@ -47,7 +43,9 @@ async function userAuthentication(email, password) {
     } else {
       return false;
     }
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 }
 async function getUserById(userId, signedInUserId, userRole) {
   try {
@@ -72,7 +70,7 @@ async function getUserById(userId, signedInUserId, userRole) {
       return "User not found";
     }
   } catch (error) {
-    return "ObjectId";
+    throw "ObjectId";
   }
 }
 async function getUsers(signedInUserId, userRole) {
@@ -87,7 +85,9 @@ async function getUsers(signedInUserId, userRole) {
       users = "User not Authorizied";
     }
     return users;
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 }
 async function updateUser(userId, data, signedInUserId, userRole) {
   try {
@@ -111,7 +111,9 @@ async function updateUser(userId, data, signedInUserId, userRole) {
         return false;
       }
     }
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 }
 function updateRequestBody(data) {
   let updatedBody = {};
@@ -153,7 +155,9 @@ async function deleteUser(userId, signedInUserId) {
         return false;
       }
     }
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 }
 
 module.exports = {

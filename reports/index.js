@@ -6,7 +6,7 @@ const { updateUser, getUsers } = require("../Models/user/index");
 const job = schedule.scheduleJob("0 0 * * *", () => {
   weeklyReports();
 });
-
+job();
 async function weeklyReports() {
   let lastReportedDate, diffTime, diffWeeks, from, to, userId;
   let createAReport = false;

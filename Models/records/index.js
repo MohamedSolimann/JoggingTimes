@@ -34,7 +34,7 @@ async function getRecordById(recordId, signedInUserId) {
       return "Record not found";
     }
   } catch (error) {
-    return error.kind;
+    throw error.kind;
   }
 }
 async function getRecords(signedInUserId, userRole) {
@@ -48,7 +48,9 @@ async function getRecords(signedInUserId, userRole) {
       records = await recordModel.find({ user_id: signedInUserId }).lean();
     }
     return records;
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 }
 async function getRecordsBetweenDates(userId, fromDate, toDate) {
   try {
@@ -63,7 +65,9 @@ async function getRecordsBetweenDates(userId, fromDate, toDate) {
     } else {
       return false;
     }
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 }
 async function updateRecord(recordId, data, signedInId) {
   try {
@@ -85,7 +89,9 @@ async function updateRecord(recordId, data, signedInId) {
     } else {
       return false;
     }
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 }
 function updateRequestBody(data, recordDate) {
   let updatedBody = {};
@@ -143,7 +149,9 @@ async function deleteRecord(recordId, signedInUserId) {
         return false;
       }
     }
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 }
 module.exports = {
   createRecord,

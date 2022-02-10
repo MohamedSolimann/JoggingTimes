@@ -10,7 +10,7 @@ async function createReport(report, userId) {
     await newReport.save();
     return newReport ? true : false;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 }
 module.exports = { createReport };
