@@ -21,14 +21,14 @@ const createEndpointTestCases = () => {
       .post("/record")
       .send({
         date: { year: "2022", month: "2", day: "4" },
-        time: "10mins",
-        distance: "20k",
+        time: "10",
+        distance: "20",
       })
       .set({ Cookie: signinResponse.headers["set-cookie"] });
     expect(response.status).toBe(201);
     expect(response.body.data.date).toBe("2022-02-04T00:00:00.000Z");
-    expect(response.body.data.distance).toBe("20k");
-    expect(response.body.data.time).toBe("10mins");
+    expect(response.body.data.distance).toBe("20");
+    expect(response.body.data.time).toBe("10");
   });
   it("Suppose to get validtaion error from create endpoint", async () => {
     const newUser = await createUser({
@@ -43,8 +43,8 @@ const createEndpointTestCases = () => {
       .post("/record")
       .send({
         date: "",
-        time: "10mins",
-        distance: "20k",
+        time: "10",
+        distance: "20",
       })
       .set({ Cookie: signinResponse.headers["set-cookie"] });
     expect(response.status).toBe(400);
@@ -64,7 +64,7 @@ const createEndpointTestCases = () => {
       .send({
         date: "123",
         time: "",
-        distance: "20k",
+        distance: "20",
       })
       .set({ Cookie: signinResponse.headers["set-cookie"] });
     expect(response.status).toBe(400);
@@ -83,7 +83,7 @@ const createEndpointTestCases = () => {
       .post("/record")
       .send({
         date: { year: "2022", month: "2", day: "4" },
-        time: "10mins",
+        time: "10",
         distance: "",
       })
       .set({ Cookie: signinResponse.headers["set-cookie"] });
@@ -103,8 +103,8 @@ const createEndpointTestCases = () => {
       .post("/record")
       .send({
         date: "",
-        time: "10mins",
-        distance: "20k",
+        time: "10",
+        distance: "20",
       })
       .set({ Cookie: signinResponse.headers["set-cookie"] });
     expect(response.status).toBe(400);
@@ -124,8 +124,8 @@ const readEndpointTestCases = () => {
     const newRecord = await createRecord(
       {
         date: { year: "2022", month: "2", day: "4" },
-        time: "10mins",
-        distance: "20k",
+        time: "10",
+        distance: "20",
       },
       newUser._id
     );
@@ -134,8 +134,8 @@ const readEndpointTestCases = () => {
       .set({ Cookie: signinResponse.headers["set-cookie"] });
     expect(response.status).toBe(200);
     expect(response.body.data.date).toBe("2022-02-04T00:00:00.000Z");
-    expect(response.body.data.distance).toBe("20k");
-    expect(response.body.data.time).toBe("10mins");
+    expect(response.body.data.distance).toBe("20");
+    expect(response.body.data.time).toBe("10");
   });
   it("Suppose to get error invalid record id ", async () => {
     const newUser = await createUser({
@@ -149,8 +149,8 @@ const readEndpointTestCases = () => {
     const newRecord = await createRecord(
       {
         date: { year: "2022", month: "2", day: "4" },
-        time: "10mins",
-        distance: "20k",
+        time: "10",
+        distance: "20",
       },
       newUser._id
     );
@@ -171,8 +171,8 @@ const readEndpointTestCases = () => {
     const newRecord = await createRecord(
       {
         date: { year: "2022", month: "2", day: "4" },
-        time: "10mins",
-        distance: "20k",
+        time: "10",
+        distance: "20",
       },
       newUser._id
     );
@@ -192,8 +192,8 @@ const readEndpointTestCases = () => {
     const newRecord = await createRecord(
       {
         date: { year: "2022", month: "02", day: "04" },
-        time: "10mins",
-        distance: "20k",
+        time: "10",
+        distance: "20",
       },
       newUser._id
     );
@@ -204,7 +204,7 @@ const readEndpointTestCases = () => {
   });
 };
 const udpateEndpointTestCases = () => {
-  it("Suppose to update record ", async () => {
+  it("Suppose to update record distance", async () => {
     const newUser = await createUser({
       email: "a7@a.com",
       password: "123123123",
@@ -216,20 +216,78 @@ const udpateEndpointTestCases = () => {
     const newRecord = await createRecord(
       {
         date: { year: "2022", month: "2", day: "4" },
-        time: "10mins",
-        distance: "20k",
+        time: "10",
+        distance: "20",
       },
       newUser._id
     );
     let oldDistance = newRecord.distance;
     const response = await request
       .put(`/record/${newRecord._id}`)
-      .send({ distance: "10k" })
+      .send({ distance: "10" })
       .set({ Cookie: signinResponse.headers["set-cookie"] });
     let updatedDistance = response.body.data.distance;
     expect(response.status).toBe(201);
     expect(oldDistance).not.toEqual(updatedDistance);
-    expect(response.body.data.distance).toEqual("10k");
+    expect(response.body.data.distance).toEqual("10");
+  });
+  it("Suppose to update record time", async () => {
+    const newUser = await createUser({
+      email: "a7@a.com",
+      password: "123123123",
+      role: "Regular",
+    });
+    const signinResponse = await request
+      .post("/userauth/signin")
+      .send({ email: "a7@a.com", password: "123123123" });
+    const newRecord = await createRecord(
+      {
+        date: { year: "2022", month: "2", day: "4" },
+        time: "5",
+        distance: "20",
+      },
+      newUser._id
+    );
+    let oldTime = newRecord.distance;
+    const response = await request
+      .put(`/record/${newRecord._id}`)
+      .send({ time: "10" })
+      .set({ Cookie: signinResponse.headers["set-cookie"] });
+    let updatedTime = response.body.data.time;
+    expect(response.status).toBe(201);
+    expect(oldTime).not.toEqual(updatedTime);
+    expect(response.body.data.time).toEqual("10");
+  });
+  it("Suppose to update record distance and time", async () => {
+    const newUser = await createUser({
+      email: "a7@a.com",
+      password: "123123123",
+      role: "Regular",
+    });
+    const signinResponse = await request
+      .post("/userauth/signin")
+      .send({ email: "a7@a.com", password: "123123123" });
+    const newRecord = await createRecord(
+      {
+        date: { year: "2022", month: "2", day: "4" },
+        time: "5",
+        distance: "20",
+      },
+      newUser._id
+    );
+    let oldDistance = newRecord.distance;
+    let oldTime = newRecord.distance;
+    const response = await request
+      .put(`/record/${newRecord._id}`)
+      .send({ time: "10", distance: "10" })
+      .set({ Cookie: signinResponse.headers["set-cookie"] });
+    let updatedTime = response.body.data.time;
+    let updatedDistance = response.body.data.distance;
+    expect(response.status).toBe(201);
+    expect(oldTime).not.toEqual(updatedTime);
+    expect(oldDistance).not.toEqual(updatedDistance);
+    expect(response.body.data.distance).toEqual("10");
+    expect(response.body.data.time).toEqual("10");
   });
   it("Suppose to get error not authorizied ", async () => {
     const newUser = await createUser({
@@ -240,8 +298,8 @@ const udpateEndpointTestCases = () => {
     const newRecord = await createRecord(
       {
         date: { year: "2022", month: "2", day: "4" },
-        time: "10mins",
-        distance: "20k",
+        time: "10",
+        distance: "20",
       },
       newUser._id
     );
@@ -265,8 +323,8 @@ const deleteEndpointTestCases = () => {
     const newRecord = await createRecord(
       {
         date: { year: "2022", month: "2", day: "4" },
-        time: "10mins",
-        distance: "20k",
+        time: "10",
+        distance: "20",
       },
       newUser._id
     );
@@ -289,8 +347,8 @@ const deleteEndpointTestCases = () => {
     const newRecord = await createRecord(
       {
         date: { year: "2022", month: "2", day: "4" },
-        time: "10mins",
-        distance: "20k",
+        time: "10",
+        distance: "20",
       },
       newUser._id
     );
